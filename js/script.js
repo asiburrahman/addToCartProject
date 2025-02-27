@@ -58,9 +58,7 @@
 //     const selectedColorButton = document.querySelector(
 //       "button.border-purple-600.w-6"
 //     );
-//     const selectedColor = selectedColorButton
-//       ? selectedColorButton.id.split("-")[0]
-//       : "S";
+//     const selectedColor = selectedColorButton.id.split("-")[0];
 
 //     const selectedSizeButtons = document.querySelector(
 //       "button.border-purple-600:not(.w-6)"
@@ -167,7 +165,7 @@ function selectWristSize(size){
 }
 
 const quantityButton = document.querySelectorAll('.quantity-button');
-let quantity  = document.getElementById('quantity');
+
 // console.log(quantityButton);
 let sum = 0;
  
@@ -175,16 +173,17 @@ for (let btn of quantityButton){
   
     btn.addEventListener('click', function(event){
       // console.log(event.target.innerText);
+      let quantityEelemnt  = document.getElementById('quantity');
      
       if (event.target.innerText === '+') {
         sum = Math.max(0, sum += 1 )
-        quantity.innerText = sum;
+        quantityEelemnt.innerText = sum;
         // console.log(sum);
         
       }
       else if(event.target.innerText === '-'){
         sum =Math.max(0, sum -= 1 )
-        quantity.innerText = sum;
+        quantityEelemnt.innerText = sum;
         // console.log(sum);
       }
     })
@@ -195,15 +194,20 @@ const addToCart = document.getElementById('add-to-cart');
 const checkoutContainer = document.getElementById('checkout-container');
 const checkoutBtn = document.getElementById('checkout-btn');
 const cartCount = document.getElementById('cart-count');
+console.log(quantity);
+
 
 let cartItems = [];
+let cartCountSum = 0;
 addToCart.addEventListener('click', function(){
+  const quantity = parseInt(document.getElementById("quantity").innerText);
   // console.log("hi");
-  if (sum > 0) {
-    console.log("hi");
+  if (quantity > 0) {
+    // console.log("hi");
     
     checkoutContainer.classList.remove('hidden')
-    cartCount.innerText = sum;
+    cartCountSum += quantity;
+    cartCount.innerText = cartCountSum;
 
 
     const selectedColorButton = document.querySelector("button.border-purple-600.w-6");
@@ -212,16 +216,18 @@ addToCart.addEventListener('click', function(){
      const productSize = selectedSizeButton[0];
      const productPrice = parseInt(selectedSizeButton[1]);
      
-    console.log(selectedSizeButton);
+    // console.log(selectedSizeButton);
     cartItems.push({
             image: selectedColor + ".png",
             title: " Classy Modern Smart Watch",
             color: selectedColor,
             size: productSize,
-            quantity: sum,
-            price: sum * productPrice,
+            quantity: quantity,
+            price: cartCountSum * productPrice,
           });
-
+          // console.log(cartItems);
+          
+          
   }else{
     checkoutContainer.classList.add('hidden')
   
@@ -231,17 +237,38 @@ addToCart.addEventListener('click', function(){
 })
 
 const cartModal = document.getElementById('cart-modal')
-  //       image: ,
-  //       title: " Classy Modern Smart Watch",
-  //       color: ,
-  //       size: ,
-  //       quantity:,
-  //       price: ,
-  //     
+const cartItemsContianer = document.getElementById('cart-items');
   
 checkoutBtn.addEventListener('click', function(){
   cartModal.classList.remove('hidden')
+  const row = document.createElement('tr');
+  for (let i = 0; i < cartItems.length; i++) {
+    const item = cartItems[i];
+    
+    
+    row.innerHTML = `
+  <td class="py-2 px-4">
+      <div class="flex items-center space-x-2">
+        <img class="h-12 w-12 object-cover rounded-md" src="./images/${item.image}" alt="">
+        <span class="font-semibold">${item.title}</span>
+      </div>
+    </td>
+    <td class="py-2 px-4">${item.color}</td>
+    <td class="py-2 px-4">${item.size}</td>
+    <td class="py-2 px-4">${item.quantity}</td>
+    <td class="py-2 px-4">$${item.price}</td>
+  `
+  //  cartCount.innerText = 0;
+  // quantity.innerText = 0;
+  // sum = 0
+  }
 
+  cartItemsContianer.appendChild(row);
+  
   
   
 })
+
+document.getElementById("continue-shopping").addEventListener("click", function () {
+    document.getElementById("cart-modal").classList.add("hidden");
+  });
