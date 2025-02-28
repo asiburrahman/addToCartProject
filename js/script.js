@@ -199,6 +199,7 @@ console.log(quantity);
 
 let cartItems = [];
 let cartCountSum = 0;
+
 addToCart.addEventListener('click', function(){
   const quantity = parseInt(document.getElementById("quantity").innerText);
   // console.log("hi");
@@ -224,8 +225,9 @@ addToCart.addEventListener('click', function(){
             size: productSize,
             quantity: quantity,
             price: cartCountSum * productPrice,
+            
           });
-          // console.log(cartItems);
+           
           
           
   }else{
@@ -238,10 +240,12 @@ addToCart.addEventListener('click', function(){
 
 const cartModal = document.getElementById('cart-modal')
 const cartItemsContianer = document.getElementById('cart-items');
-  
+let totalPrice = 0;
 checkoutBtn.addEventListener('click', function(){
+
   cartModal.classList.remove('hidden')
   const row = document.createElement('tr');
+  const TotalPrice = document.getElementById('total-price');
   for (let i = 0; i < cartItems.length; i++) {
     const item = cartItems[i];
     
@@ -258,17 +262,23 @@ checkoutBtn.addEventListener('click', function(){
     <td class="py-2 px-4">${item.quantity}</td>
     <td class="py-2 px-4">$${item.price}</td>
   `
+    totalPrice +=item.price
   //  cartCount.innerText = 0;
   // quantity.innerText = 0;
   // sum = 0
   }
+ 
 
   cartItemsContianer.appendChild(row);
-  
+  TotalPrice.innerText = `$${totalPrice}`;
+ 
   
   
 })
 
 document.getElementById("continue-shopping").addEventListener("click", function () {
     document.getElementById("cart-modal").classList.add("hidden");
+    
+    
+    // cartItemsContianer.removeChild(lastRow)
   });
